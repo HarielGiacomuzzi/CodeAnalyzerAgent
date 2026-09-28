@@ -50,9 +50,9 @@ def analyze(req: AnalyzeRequest, response: Response, analyzer: CodeAnalyzer = De
     key = hashlib.sha256(
         json.dumps([analyzer.model, req.analysis_type, req.language, req.code]).encode()
     ).hexdigest()
-    if key in CACHE:
+    if (hit := CACHE.get(key)) is not None:
         response.headers["X-Cache"] = "HIT"
-        return CACHE[key]
+        return hit
 
     try:
         result = analyzer.analyze(req.code, req.language, req.analysis_type)
@@ -64,6 +64,8 @@ def analyze(req: AnalyzeRequest, response: Response, analyzer: CodeAnalyzer = De
         raise HTTPException(502, f"LLM provider error (HTTP {exc.status_code})") from exc
     except anthropic.APIConnectionError as exc:
         raise HTTPException(502, "Could not reach the LLM provider") from exc
+    except anthropic.APIError as exc:
+        raise HTTPException(502, "LLM provider error") from exc
 
     result = AnalyzeResponse.build(result, req.analysis_type, code_stats(req.code))
     with CACHE_LOCK:

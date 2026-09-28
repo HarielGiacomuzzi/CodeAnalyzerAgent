@@ -155,7 +155,7 @@ Applied server-side to whatever the LLM returns, in `AnalyzeResponse.build` (`an
 | `422` | Request body fails Pydantic validation. | Standard FastAPI validation error array, e.g. for `{"code": ""}`: `[{"type": "value_error", "loc": ["body", "code"], "msg": "Value error, code must not be blank", ...}]` |
 | `503` | `ANTHROPIC_API_KEY` is not set. | `"LLM not configured: set the ANTHROPIC_API_KEY environment variable"` |
 | `429` | The Anthropic API returned a rate-limit error. | `"LLM provider rate limit reached, retry shortly"` |
-| `502` | The LLM produced malformed/unusable output, refused, or the provider/network failed. | `"LLM returned malformed analysis JSON"`, `"LLM stopped without a result (stop_reason=...)"`, `"LLM did not finish within the tool-call limit"`, `"LLM provider error (HTTP 500)"`, `"Could not reach the LLM provider"` |
+| `502` | The LLM produced malformed/unusable output, refused, or the provider/network failed. | `"LLM returned malformed analysis JSON"`, `"LLM stopped without a result (stop_reason=...)"`, `"LLM did not finish within the tool-call limit"`, `"LLM provider error (HTTP 500)"`, `"Could not reach the LLM provider"`, `"LLM provider error"` |
 
 Example `422` request/response:
 

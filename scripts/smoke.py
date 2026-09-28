@@ -20,14 +20,21 @@ SAMPLES = {
 REQUIRED = {"language", "summary", "issues", "suggestions", "metrics", "analysis_type", "stats"}
 
 
+def _parse(raw: bytes) -> dict:
+    try:
+        return json.loads(raw or b"{}")
+    except ValueError:
+        return {"detail": raw[:200].decode(errors="replace")}
+
+
 def call(method: str, path: str, payload: dict | None = None) -> tuple[int, dict]:
     data = json.dumps(payload).encode() if payload is not None else None
     req = urllib.request.Request(f"{BASE_URL}{path}", data=data, method=method, headers={"Content-Type": "application/json"})
     try:
         with urllib.request.urlopen(req, timeout=300) as res:
-            return res.status, json.load(res)
+            return res.status, _parse(res.read())
     except urllib.error.HTTPError as exc:
-        return exc.code, json.loads(exc.read() or b"{}")
+        return exc.code, _parse(exc.read())
     except (urllib.error.URLError, TimeoutError) as exc:
         return 0, {"detail": str(exc)}
 

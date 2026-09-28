@@ -181,7 +181,7 @@ requirements.md          Original lab assignment/requirements
 | Responsive design | `static/styles.css` |
 | At least 2 analysis types | `analyzer/models.py` (`AnalysisType`: general, security, performance) |
 | Tested with sample code | `samples/`, `scripts/smoke.py`, `tests/` |
-| Deployed to Railway (extension) | Not deployed yet — see [docs/DEPLOYMENT.md](docs/DEPLOYMENT.md) |
+| Deployed to Railway | See "Live demo" at the top of this README |
 | Extension — Language Detection | Done: `"language": "auto"` (`analyzer/models.py`, `analyzer/prompts.py`) |
 | Extension — Caching | Done: `X-Cache` header (`main.py`) |
 | Extension — Multi-file analysis | Not implemented |

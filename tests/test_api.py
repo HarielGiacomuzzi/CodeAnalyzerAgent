@@ -103,6 +103,7 @@ def _status_error(cls, status):
         (_status_error(anthropic.RateLimitError, 429), 429),
         (_status_error(anthropic.InternalServerError, 500), 502),
         (anthropic.APIConnectionError(request=httpx.Request("POST", "https://api.anthropic.com")), 502),
+        (anthropic.APIError("boom", request=httpx.Request("POST", "https://api.anthropic.com"), body=None), 502),
     ],
 )
 def test_llm_failures_map_to_clean_errors(client, error, status):
