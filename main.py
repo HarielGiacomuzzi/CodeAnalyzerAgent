@@ -1,6 +1,7 @@
 import hashlib
 import json
 import os
+import threading
 from functools import lru_cache
 
 import anthropic
@@ -19,6 +20,7 @@ app = FastAPI(
 # ponytail: in-process FIFO cache, lost on restart and not shared across replicas; use Redis if that matters
 CACHE: dict[str, AnalyzeResponse] = {}
 CACHE_SIZE = 256
+CACHE_LOCK = threading.Lock()
 
 
 @lru_cache
@@ -62,8 +64,9 @@ def analyze(req: AnalyzeRequest, response: Response, analyzer: CodeAnalyzer = De
         raise HTTPException(502, "Could not reach the LLM provider") from exc
 
     result = AnalyzeResponse.build(result, req.analysis_type, code_stats(req.code))
-    if len(CACHE) >= CACHE_SIZE:
-        CACHE.pop(next(iter(CACHE)))
-    CACHE[key] = result
+    with CACHE_LOCK:
+        if len(CACHE) >= CACHE_SIZE:
+            CACHE.pop(next(iter(CACHE)), None)
+        CACHE[key] = result
     response.headers["X-Cache"] = "MISS"
     return result
