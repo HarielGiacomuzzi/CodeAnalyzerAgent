@@ -3,9 +3,11 @@ import json
 import os
 import threading
 from functools import lru_cache
+from pathlib import Path
 
 import anthropic
 from fastapi import Depends, FastAPI, HTTPException, Response
+from fastapi.staticfiles import StaticFiles
 
 from analyzer.llm import DEFAULT_MODEL, AnalysisError, AnthropicAnalyzer, CodeAnalyzer
 from analyzer.models import AnalyzeRequest, AnalyzeResponse
@@ -70,3 +72,6 @@ def analyze(req: AnalyzeRequest, response: Response, analyzer: CodeAnalyzer = De
         CACHE[key] = result
     response.headers["X-Cache"] = "MISS"
     return result
+
+
+app.mount("/", StaticFiles(directory=Path(__file__).parent / "static", html=True), name="static")

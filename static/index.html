@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Code Analyzer</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <header class="topbar">
+    <h1>Code Analyzer</h1>
+    <p class="tagline">Paste or upload code and get structured feedback from Claude.</p>
+  </header>
+
+  <main class="layout">
+    <form id="analyze-form" class="panel input-panel" novalidate>
+      <div class="controls">
+        <label>Language
+          <select id="language" name="language">
+            <option value="auto" selected>Auto-detect</option>
+            <option value="python">Python</option>
+            <option value="javascript">JavaScript</option>
+            <option value="typescript">TypeScript</option>
+            <option value="java">Java</option>
+            <option value="go">Go</option>
+            <option value="rust">Rust</option>
+            <option value="c">C</option>
+            <option value="cpp">C++</option>
+            <option value="csharp">C#</option>
+            <option value="ruby">Ruby</option>
+            <option value="php">PHP</option>
+            <option value="kotlin">Kotlin</option>
+            <option value="swift">Swift</option>
+            <option value="sql">SQL</option>
+            <option value="bash">Bash</option>
+          </select>
+        </label>
+        <label>Analysis
+          <select id="analysis-type" name="analysis_type">
+            <option value="general" selected>General</option>
+            <option value="security">Security</option>
+            <option value="performance">Performance</option>
+          </select>
+        </label>
+        <label class="file-label">Upload file
+          <input id="file" type="file" accept=".py,.js,.mjs,.ts,.tsx,.jsx,.java,.go,.rs,.c,.h,.cpp,.cc,.hpp,.cs,.rb,.php,.kt,.swift,.sql,.sh,.txt">
+        </label>
+      </div>
+
+      <label for="code" class="code-label">Code</label>
+      <textarea id="code" name="code" spellcheck="false" placeholder="Paste your code here…" required></textarea>
+
+      <div class="actions">
+        <span id="char-count" class="muted">0 / 100000</span>
+        <button id="analyze-btn" type="submit">
+          <span class="spinner" aria-hidden="true"></span>
+          <span class="label">Analyze</span>
+        </button>
+      </div>
+      <p id="error" class="error" role="alert" hidden></p>
+    </form>
+
+    <section id="results" class="panel results-panel" aria-live="polite" aria-busy="false">
+      <p class="placeholder muted">Results will appear here.</p>
+    </section>
+  </main>
+
+  <script src="/app.js" defer></script>
+</body>
+</html>
