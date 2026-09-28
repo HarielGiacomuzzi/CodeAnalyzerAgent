@@ -1,0 +1,21 @@
+[project]
+name = "code-analyzer-agent"
+version = "0.1.0"
+description = "LLM-powered code analysis API and web UI"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "anthropic>=1.8,<2",
+    "fastapi>=0.141",
+    "uvicorn[standard]>=0.54",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9",
+    "httpx>=0.28",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
